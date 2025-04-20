@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+- 该项目是基于 Telegram 平台的一款 mini app，主要内容是一个小游戏的运营平台，提供非常多的游戏给玩家游玩
+- 界面 UI 希望参考 ios 的 app store 风格
+- 使用的技术栈参考 package.json
+
+- 因为是运行在移动端的，页面布局要充分考虑手机端的展示效果，做到响应式布局等
