@@ -10,7 +10,7 @@ echo "===== 开始部署 Tele-Game-Hub ====="
 
 # 安装依赖
 echo "正在安装依赖..."
-npm install --production
+npm install
 
 # # 构建项目
 # echo "正在构建项目..."
@@ -34,7 +34,7 @@ if [ $? -eq 0 ]; then
     pm2 restart tele-game-hub
 else
     # 应用不存在，使用配置文件启动
-    pm2 start ecosystem.config.js
+    pm2 start npm --name "tele-game-hub" -- start
 fi
 
 # 保存PM2配置

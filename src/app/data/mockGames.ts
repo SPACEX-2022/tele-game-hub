@@ -182,21 +182,21 @@ export const mockBanners: FeaturedBanner[] = [
   {
     id: "1",
     game: mockGames.find(game => game.id === "1")!,
-    image: "/banners/space-adventure-banner.jpg",
-    title: "太空冒险",
-    subtitle: "探索无尽宇宙"
+    image: "/banners/banner1.png",
+    title: "我的停车场",
+    subtitle: "欢迎来到“我的停车场”，终极解谜挑战！"
   },
   {
     id: "2",
     game: mockGames.find(game => game.id === "2")!,
-    image: "/banners/magic-kingdom-banner.jpg",
+    image: "",
     title: "魔法王国",
     subtitle: "成为最强魔法师"
   },
   {
     id: "3",
     game: mockGames.find(game => game.id === "7")!,
-    image: "/banners/shadow-hunter-banner.jpg",
+    image: "",
     title: "暗影猎人",
     subtitle: "在黑暗中狩猎"
   }

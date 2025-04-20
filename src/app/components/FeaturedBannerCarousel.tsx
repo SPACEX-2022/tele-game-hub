@@ -52,7 +52,7 @@ export default function FeaturedBannerCarousel({ banners }: FeaturedBannerCarous
             >
               <div className="relative w-full h-full">
                 <Image
-                  src={placeholderImage}
+                  src={banner.image || placeholderImage}
                   alt={banner.title}
                   fill
                   className="object-cover"
