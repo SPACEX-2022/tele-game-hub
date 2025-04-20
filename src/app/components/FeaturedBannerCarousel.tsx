@@ -2,7 +2,7 @@
 import { FeaturedBanner } from '../types/game';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, TouchEvent } from 'react';
 
 interface FeaturedBannerCarouselProps {
   banners: FeaturedBanner[];
@@ -10,21 +10,58 @@ interface FeaturedBannerCarouselProps {
 
 export default function FeaturedBannerCarousel({ banners }: FeaturedBannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // 自动轮播
   useEffect(() => {
     if (banners.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((current) => (current + 1) % banners.length);
+      if (!isSwiping) {
+        setCurrentIndex((current) => (current + 1) % banners.length);
+      }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [banners.length]);
+  }, [banners.length, isSwiping]);
 
   // 手动切换轮播
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
+  };
+
+  // 处理手势开始
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsSwiping(true);
+  };
+
+  // 处理手势移动
+  const handleTouchMove = (e: TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  // 处理手势结束
+  const handleTouchEnd = () => {
+    setIsSwiping(false);
+    
+    // 如果滑动距离足够大，才切换轮播图
+    if (touchStart - touchEnd > 75) {
+      // 向左滑动
+      setCurrentIndex((current) => (current + 1) % banners.length);
+    }
+
+    if (touchEnd - touchStart > 75) {
+      // 向右滑动
+      setCurrentIndex((current) => (current === 0 ? banners.length - 1 : current - 1));
+    }
+    
+    // 重置触摸状态
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   if (banners.length === 0) return null;
@@ -35,8 +72,12 @@ export default function FeaturedBannerCarousel({ banners }: FeaturedBannerCarous
   return (
     <div className="relative w-full h-[180px] sm:h-[220px] mb-6 overflow-hidden rounded-xl">
       <div 
+        ref={carouselRef}
         className="flex transition-transform duration-500 ease-in-out h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {banners.map((banner, index) => {
           // 根据索引返回不同的链接
@@ -49,6 +90,7 @@ export default function FeaturedBannerCarousel({ banners }: FeaturedBannerCarous
               href={linkHref}
               key={banner.id} 
               className="min-w-full h-full relative"
+              onClick={(e) => isSwiping && e.preventDefault()}
             >
               <div className="relative w-full h-full">
                 <Image
